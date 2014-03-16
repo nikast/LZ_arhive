@@ -59,5 +59,14 @@ namespace LZ_arhive.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Error: Could&apos;t read file from disk..
+        /// </summary>
+        internal static string MainForm_StartButton_Click_Error__Could_t_read_file_from_disk_ {
+            get {
+                return ResourceManager.GetString("MainForm_StartButton_Click_Error__Could_t_read_file_from_disk_", resourceCulture);
+            }
+        }
     }
 }
