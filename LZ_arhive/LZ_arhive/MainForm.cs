@@ -17,6 +17,8 @@ namespace LZ_arhive
 
         private OpenFileDialog _openFileDialog;
 
+        private LogicProgram _logicProgram;
+
         private readonly string _path;
 
         public MainForm()
@@ -63,15 +65,14 @@ namespace LZ_arhive
                 {
                     using (_stream)
                     {
-                       var byteFile =  _stream.ReadByte();
-                       
+                        _logicProgram = new LogicProgram(_stream);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(@"Error: Could't read file from disk.");
-            }
+                MessageBox.Show(@"Internal error. Sorry.");
+            } 
 
         }
 
