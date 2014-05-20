@@ -35,6 +35,7 @@
             this.ExitMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.MainPanel = new System.Windows.Forms.Panel();
             this.Archive = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -44,16 +45,20 @@
             this.OpenFIle = new System.Windows.Forms.Button();
             this.NameBox1 = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.UnZip = new System.Windows.Forms.Button();
             this.PathLabelUnzip = new System.Windows.Forms.Label();
             this.OpenUnzipButton = new System.Windows.Forms.Button();
             this.NameBoxUnzip = new System.Windows.Forms.TextBox();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.Archive.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.BottomPanel.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -104,11 +109,19 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 230);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(460, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
             // MainPanel
             // 
@@ -163,7 +176,7 @@
             this.StartButton.Name = "StartButton";
             this.StartButton.Size = new System.Drawing.Size(75, 23);
             this.StartButton.TabIndex = 4;
-            this.StartButton.Text = "Start";
+            this.StartButton.Text = "ZIP";
             this.StartButton.UseVisualStyleBackColor = true;
             this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
             // 
@@ -196,6 +209,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tabPage2.Controls.Add(this.panel1);
             this.tabPage2.Controls.Add(this.PathLabelUnzip);
             this.tabPage2.Controls.Add(this.OpenUnzipButton);
             this.tabPage2.Controls.Add(this.NameBoxUnzip);
@@ -207,9 +222,25 @@
             this.tabPage2.Text = "Unarchive";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // openFileDialog1
+            // panel1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.UnZip);
+            this.panel1.Location = new System.Drawing.Point(7, 92);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(440, 83);
+            this.panel1.TabIndex = 7;
+            // 
+            // UnZip
+            // 
+            this.UnZip.Enabled = false;
+            this.UnZip.Location = new System.Drawing.Point(25, 24);
+            this.UnZip.Name = "UnZip";
+            this.UnZip.Size = new System.Drawing.Size(70, 29);
+            this.UnZip.TabIndex = 0;
+            this.UnZip.Text = "UnZip";
+            this.UnZip.UseVisualStyleBackColor = true;
+            this.UnZip.Click += new System.EventHandler(this.UnZip_Click);
             // 
             // PathLabelUnzip
             // 
@@ -238,6 +269,10 @@
             this.NameBoxUnzip.Size = new System.Drawing.Size(238, 20);
             this.NameBoxUnzip.TabIndex = 4;
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -247,11 +282,14 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Archive LZ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.MainPanel.ResumeLayout(false);
             this.Archive.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -259,6 +297,7 @@
             this.BottomPanel.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -283,6 +322,9 @@
         private System.Windows.Forms.Label PathLabel;
         private System.Windows.Forms.Panel BottomPanel;
         private System.Windows.Forms.Button StartButton;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button UnZip;
         private System.Windows.Forms.Label PathLabelUnzip;
         private System.Windows.Forms.Button OpenUnzipButton;
         private System.Windows.Forms.TextBox NameBoxUnzip;

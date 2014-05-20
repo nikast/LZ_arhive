@@ -1,31 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LZ_arhive
 {
+    /// <summary>
+    /// Основная форма программы
+    /// </summary>
     public partial class MainForm : Form
     {
-        private Stream _stream;
+        /// <summary>
+        /// Диалог открытия файла
+        /// </summary>
+        private OpenFileDialog _openFile;
 
-        private OpenFileDialog _openFileDialog;
+        /// <summary>
+        /// Диалог открытия архива
+        /// </summary>
+        private OpenFileDialog _openFileZip;
 
-        private LogicProgram _logicProgram;
-
+        /// <summary>
+        /// Путь
+        /// </summary>
         private readonly string _path;
 
         public MainForm()
         {
             InitializeComponent();
+            this.toolStripStatusLabel1.Text = "";
             _path = Directory.GetCurrentDirectory();
             PathLabel.Text = @"Path : " + _path;
+            PathLabelUnzip.Text = @"Path : " + _path;
         }
 
         /// <summary>
@@ -35,19 +42,20 @@ namespace LZ_arhive
         /// <param name="e"></param>
         private void OpenFileButton(object sender, EventArgs e)
         {
-            
-            _openFileDialog = new OpenFileDialog
+            this.toolStripStatusLabel1.Text = "";
+
+            _openFile = new OpenFileDialog
             {
-                Filter =@"Microsoft databases (*.mdb)|*.mdb|Microsoft document (*.doc)|*.doc",
+                Filter = @"Microsoft databases (*.mdb)|*.mdb|Microsoft document (*.doc)|*.doc",
                 InitialDirectory = _path,
-                
+
             };
 
-            if (_openFileDialog.ShowDialog() != DialogResult.OK) return;
+            if (_openFile.ShowDialog() != DialogResult.OK) return;
 
-            var filename = _openFileDialog.SafeFileName;
+            var filename = _openFile.SafeFileName;
             NameBox1.Text = filename;
-            PathLabel.Text = @"Path : " + _openFileDialog.FileName;
+            PathLabel.Text = @"Path : " + _openFile.FileName;
             StartButton.Enabled = true;
 
         }
@@ -61,18 +69,31 @@ namespace LZ_arhive
         {
             try
             {
-                if ((_stream = _openFileDialog.OpenFile()) != null)
+                var reader = new StreamReader(_openFile.FileName);
+                var list = new List<byte>();
+                using (reader)
                 {
-                    using (_stream)
+                    var currentByte = reader.BaseStream.ReadByte();
+                    while (currentByte > -1)
                     {
-                        _logicProgram = new LogicProgram(_stream);
+                        list.Add((byte)currentByte);
+                        currentByte = reader.BaseStream.ReadByte();
                     }
                 }
+
+                var encoder = new LzCoder(File.ReadAllText(_openFile.FileName, System.Text.ASCIIEncoding.Default));
+
+                File.WriteAllBytes(_openFile.FileName + ".nikast", encoder.ProcessZip().ToArray());
+
+                this.toolStripStatusLabel1.Text = @"Сжатие выполнено...";
+                StartButton.Enabled = false;
+                NameBox1.Text = "";
             }
             catch (Exception ex)
             {
-                MessageBox.Show(@"Internal error. Sorry.");
-            } 
+                this.toolStripStatusLabel1.Text = @"В процессе выполнения обнаружены ошибки.";
+                MessageBox.Show(@"Processing error. Reason is : " + ex.Message);
+            }
 
         }
 
@@ -93,27 +114,67 @@ namespace LZ_arhive
         /// <param name="e"></param>
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (_stream == null) return;
-            _stream.Close();
-            _stream.Dispose();
+            // Если понадобится что-то сделать при закрытии.
         }
 
+
+        /// <summary>
+        /// Диалог выбора файла для распаковки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OpenUnzipButton_Click(object sender, EventArgs e)
         {
-            var _openFileDialog = new OpenFileDialog
+            this.toolStripStatusLabel1.Text = "";
+            _openFileZip = new OpenFileDialog
             {
-                Filter = @"Archive files (*.nikast)|*.nikastdoc",
+                Filter = @"Archive files (*.nikast)|*.nikast",
                 InitialDirectory = _path,
-
             };
 
-            if (_openFileDialog.ShowDialog() != DialogResult.OK) return;
+            if (_openFileZip.ShowDialog() != DialogResult.OK) return;
 
-            var filename = _openFileDialog.SafeFileName;
-            NameBox1.Text = filename;
-            PathLabel.Text = @"Path : " + _openFileDialog.FileName;
+            var filename = _openFileZip.SafeFileName;
+            NameBoxUnzip.Text = filename;
+            PathLabelUnzip.Text = @"Path : " + _openFileZip.FileName;
+            UnZip.Enabled = true;
         }
 
+        /// <summary>
+        /// Кнопка распаковать.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UnZip_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var reader = new StreamReader(_openFileZip.FileName);
+                var list = new List<byte>();
+                using (reader)
+                {
+                    var currentByte = reader.BaseStream.ReadByte();
+                    while (currentByte > -1)
+                    {
+                        list.Add((byte)currentByte);
+                        currentByte = reader.BaseStream.ReadByte();
+                    }
+                }
+                var decoder = new LzDecoder(list);
 
+                File.WriteAllText(_openFileZip.FileName.Replace(".nikast", ""), decoder.Decoder(), System.Text.Encoding.Default);
+
+                this.toolStripStatusLabel1.Text = @"Распаковка выполнена...";
+
+                UnZip.Enabled = false;
+
+                NameBoxUnzip.Text = "";
+            }
+            catch (Exception ex)
+            {
+                this.toolStripStatusLabel1.Text = @"В процессе выполнения обнаружены ошибки.";
+                MessageBox.Show(@"Processing error. Reason is : " + ex.Message);
+            }
+        }
     }
 }
