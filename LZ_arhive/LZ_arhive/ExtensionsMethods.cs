@@ -8,7 +8,7 @@ namespace LZ_arhive
     /// <summary>
     /// Класс расшинения методов компрессии/декомпрессии.
     /// </summary>
-    internal static class ExtentionsMethods
+    internal static class ExtensionsMethods
     {
         /// <summary>
         /// Дописываем ноль перед стройокй бит.
