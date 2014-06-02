@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtentionsMethods.cs" />
+    <Compile Include="ExtensionsMethods.cs" />
     <Compile Include="LZ_Coder.cs" />
     <Compile Include="LZ_Decoder.cs" />
     <Compile Include="MainForm.cs">

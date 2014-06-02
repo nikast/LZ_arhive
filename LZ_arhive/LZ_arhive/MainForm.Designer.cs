@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.ArchiveMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.UnArchiveMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.ExitMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -51,6 +47,8 @@
             this.OpenUnzipButton = new System.Windows.Forms.Button();
             this.NameBoxUnzip = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.ZipBar = new System.Windows.Forms.ProgressBar();
+            this.UnzipBar = new System.Windows.Forms.ProgressBar();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.MainPanel.SuspendLayout();
@@ -64,42 +62,12 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FileMenu,
             this.AboutMenu});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(460, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(472, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
-            // 
-            // FileMenu
-            // 
-            this.FileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ArchiveMenu,
-            this.UnArchiveMenu,
-            this.ExitMenu});
-            this.FileMenu.Name = "FileMenu";
-            this.FileMenu.Size = new System.Drawing.Size(37, 20);
-            this.FileMenu.Text = "File";
-            // 
-            // ArchiveMenu
-            // 
-            this.ArchiveMenu.Name = "ArchiveMenu";
-            this.ArchiveMenu.Size = new System.Drawing.Size(146, 22);
-            this.ArchiveMenu.Text = "Archive file";
-            // 
-            // UnArchiveMenu
-            // 
-            this.UnArchiveMenu.Name = "UnArchiveMenu";
-            this.UnArchiveMenu.Size = new System.Drawing.Size(146, 22);
-            this.UnArchiveMenu.Text = "Unarchive file";
-            // 
-            // ExitMenu
-            // 
-            this.ExitMenu.Name = "ExitMenu";
-            this.ExitMenu.Size = new System.Drawing.Size(146, 22);
-            this.ExitMenu.Text = "Exit";
-            this.ExitMenu.Click += new System.EventHandler(this.ExitMenu_Click);
             // 
             // AboutMenu
             // 
@@ -111,9 +79,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 230);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 250);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(460, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(472, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -130,7 +98,7 @@
             this.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainPanel.Location = new System.Drawing.Point(0, 24);
             this.MainPanel.Name = "MainPanel";
-            this.MainPanel.Size = new System.Drawing.Size(460, 206);
+            this.MainPanel.Size = new System.Drawing.Size(472, 226);
             this.MainPanel.TabIndex = 2;
             // 
             // Archive
@@ -141,12 +109,13 @@
             this.Archive.Location = new System.Drawing.Point(0, 0);
             this.Archive.Name = "Archive";
             this.Archive.SelectedIndex = 0;
-            this.Archive.Size = new System.Drawing.Size(458, 204);
+            this.Archive.Size = new System.Drawing.Size(470, 224);
             this.Archive.TabIndex = 0;
             // 
             // tabPage1
             // 
             this.tabPage1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tabPage1.Controls.Add(this.ZipBar);
             this.tabPage1.Controls.Add(this.BottomPanel);
             this.tabPage1.Controls.Add(this.PathLabel);
             this.tabPage1.Controls.Add(this.OpenFIle);
@@ -154,7 +123,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(450, 178);
+            this.tabPage1.Size = new System.Drawing.Size(462, 198);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Archive";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -164,9 +133,9 @@
             this.BottomPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.BottomPanel.Controls.Add(this.StartButton);
             this.BottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.BottomPanel.Location = new System.Drawing.Point(3, 103);
+            this.BottomPanel.Location = new System.Drawing.Point(3, 123);
             this.BottomPanel.Name = "BottomPanel";
-            this.BottomPanel.Size = new System.Drawing.Size(442, 70);
+            this.BottomPanel.Size = new System.Drawing.Size(454, 70);
             this.BottomPanel.TabIndex = 5;
             // 
             // StartButton
@@ -210,6 +179,7 @@
             // tabPage2
             // 
             this.tabPage2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tabPage2.Controls.Add(this.UnzipBar);
             this.tabPage2.Controls.Add(this.panel1);
             this.tabPage2.Controls.Add(this.PathLabelUnzip);
             this.tabPage2.Controls.Add(this.OpenUnzipButton);
@@ -217,7 +187,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(450, 178);
+            this.tabPage2.Size = new System.Drawing.Size(341, 195);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Unarchive";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -226,17 +196,18 @@
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.UnZip);
-            this.panel1.Location = new System.Drawing.Point(7, 92);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(3, 120);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(440, 83);
+            this.panel1.Size = new System.Drawing.Size(333, 70);
             this.panel1.TabIndex = 7;
             // 
             // UnZip
             // 
             this.UnZip.Enabled = false;
-            this.UnZip.Location = new System.Drawing.Point(25, 24);
+            this.UnZip.Location = new System.Drawing.Point(24, 24);
             this.UnZip.Name = "UnZip";
-            this.UnZip.Size = new System.Drawing.Size(70, 29);
+            this.UnZip.Size = new System.Drawing.Size(75, 23);
             this.UnZip.TabIndex = 0;
             this.UnZip.Text = "UnZip";
             this.UnZip.UseVisualStyleBackColor = true;
@@ -245,7 +216,7 @@
             // PathLabelUnzip
             // 
             this.PathLabelUnzip.AutoSize = true;
-            this.PathLabelUnzip.Location = new System.Drawing.Point(25, 12);
+            this.PathLabelUnzip.Location = new System.Drawing.Point(26, 17);
             this.PathLabelUnzip.Name = "PathLabelUnzip";
             this.PathLabelUnzip.Size = new System.Drawing.Size(35, 13);
             this.PathLabelUnzip.TabIndex = 6;
@@ -253,7 +224,7 @@
             // 
             // OpenUnzipButton
             // 
-            this.OpenUnzipButton.Location = new System.Drawing.Point(28, 63);
+            this.OpenUnzipButton.Location = new System.Drawing.Point(29, 71);
             this.OpenUnzipButton.Name = "OpenUnzipButton";
             this.OpenUnzipButton.Size = new System.Drawing.Size(74, 23);
             this.OpenUnzipButton.TabIndex = 5;
@@ -264,7 +235,7 @@
             // NameBoxUnzip
             // 
             this.NameBoxUnzip.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.NameBoxUnzip.Location = new System.Drawing.Point(28, 37);
+            this.NameBoxUnzip.Location = new System.Drawing.Point(29, 45);
             this.NameBoxUnzip.Name = "NameBoxUnzip";
             this.NameBoxUnzip.Size = new System.Drawing.Size(238, 20);
             this.NameBoxUnzip.TabIndex = 4;
@@ -273,11 +244,27 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // ZipBar
+            // 
+            this.ZipBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ZipBar.Location = new System.Drawing.Point(3, 108);
+            this.ZipBar.Name = "ZipBar";
+            this.ZipBar.Size = new System.Drawing.Size(454, 15);
+            this.ZipBar.TabIndex = 6;
+            // 
+            // UnzipBar
+            // 
+            this.UnzipBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.UnzipBar.Location = new System.Drawing.Point(3, 105);
+            this.UnzipBar.Name = "UnzipBar";
+            this.UnzipBar.Size = new System.Drawing.Size(333, 15);
+            this.UnzipBar.TabIndex = 8;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(460, 252);
+            this.ClientSize = new System.Drawing.Size(472, 272);
             this.Controls.Add(this.MainPanel);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -306,10 +293,6 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem FileMenu;
-        private System.Windows.Forms.ToolStripMenuItem ArchiveMenu;
-        private System.Windows.Forms.ToolStripMenuItem UnArchiveMenu;
-        private System.Windows.Forms.ToolStripMenuItem ExitMenu;
         private System.Windows.Forms.ToolStripMenuItem AboutMenu;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.Panel MainPanel;
@@ -328,6 +311,8 @@
         private System.Windows.Forms.Label PathLabelUnzip;
         private System.Windows.Forms.Button OpenUnzipButton;
         private System.Windows.Forms.TextBox NameBoxUnzip;
+        private System.Windows.Forms.ProgressBar ZipBar;
+        private System.Windows.Forms.ProgressBar UnzipBar;
     }
 }
 

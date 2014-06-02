@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace LZ_arhive
 {
@@ -26,12 +27,18 @@ namespace LZ_arhive
         private readonly StringBuilder _stringBuilder;
 
         /// <summary>
+        /// Бар
+        /// </summary>
+        private readonly ProgressBar _progressBar;
+
+        /// <summary>
         /// Словарь
         /// </summary>
         private readonly Dictionary<string, int> _dictionary;
 
-        public LzDecoder(IEnumerable<byte> input)
+        public LzDecoder(IEnumerable<byte> input, ProgressBar bar)
         {
+            _progressBar = bar;
             _codeLength = 8;
             var sb = new StringBuilder();
             _stringBuilder = new StringBuilder();
@@ -43,7 +50,7 @@ namespace LZ_arhive
             _inString = sb.ToString();
 
             for (var i = 0; i < 256; i++)
-                _dictionary.Add(System.Text.Encoding.Default.GetString(new byte[1] {Convert.ToByte(i)}), i);
+                _dictionary.Add(System.Text.ASCIIEncoding.Default.GetString(new byte[1] { Convert.ToByte(i) }), i);
 
         }
 
@@ -53,10 +60,20 @@ namespace LZ_arhive
         /// <returns></returns>
         public string Decoder()
         {
+            _progressBar.Minimum = 0;
+
+            _progressBar.Maximum = _inString.Length;
+
+            _progressBar.Step = _codeLength;
+
             var counter = 0;
+
             var prevValue = -1;
+
             while (counter < _inString.Length)
             {
+                _progressBar.Step = _codeLength;
+                _progressBar.PerformStep();
                 var w = "";
                 if (counter + 8 + _codeLength <= _inString.Length)
                 {

@@ -30,6 +30,7 @@ namespace LZ_arhive
         {
             InitializeComponent();
             this.toolStripStatusLabel1.Text = "";
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
             _path = Directory.GetCurrentDirectory();
             PathLabel.Text = @"Path : " + _path;
             PathLabelUnzip.Text = @"Path : " + _path;
@@ -43,16 +44,12 @@ namespace LZ_arhive
         private void OpenFileButton(object sender, EventArgs e)
         {
             this.toolStripStatusLabel1.Text = "";
-
             _openFile = new OpenFileDialog
             {
                 Filter = @"Microsoft databases (*.mdb)|*.mdb|Microsoft document (*.doc)|*.doc",
                 InitialDirectory = _path,
-
             };
-
             if (_openFile.ShowDialog() != DialogResult.OK) return;
-
             var filename = _openFile.SafeFileName;
             NameBox1.Text = filename;
             PathLabel.Text = @"Path : " + _openFile.FileName;
@@ -61,7 +58,7 @@ namespace LZ_arhive
         }
 
         /// <summary>
-        /// Начинаем обработку по кнопке старт
+        /// Кликнули по кнопке сжать.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -70,7 +67,9 @@ namespace LZ_arhive
             try
             {
                 var reader = new StreamReader(_openFile.FileName);
+
                 var list = new List<byte>();
+
                 using (reader)
                 {
                     var currentByte = reader.BaseStream.ReadByte();
@@ -81,13 +80,17 @@ namespace LZ_arhive
                     }
                 }
 
-                var encoder = new LzCoder(File.ReadAllText(_openFile.FileName, System.Text.ASCIIEncoding.Default));
+                var encoder = new LzCoder(File.ReadAllText(_openFile.FileName, System.Text.ASCIIEncoding.Default), ZipBar);
 
                 File.WriteAllBytes(_openFile.FileName + ".nikast", encoder.ProcessZip().ToArray());
 
                 this.toolStripStatusLabel1.Text = @"Сжатие выполнено...";
+
                 StartButton.Enabled = false;
+
                 NameBox1.Text = "";
+
+                ZipBar.Value = 0;
             }
             catch (Exception ex)
             {
@@ -131,9 +134,7 @@ namespace LZ_arhive
                 Filter = @"Archive files (*.nikast)|*.nikast",
                 InitialDirectory = _path,
             };
-
             if (_openFileZip.ShowDialog() != DialogResult.OK) return;
-
             var filename = _openFileZip.SafeFileName;
             NameBoxUnzip.Text = filename;
             PathLabelUnzip.Text = @"Path : " + _openFileZip.FileName;
@@ -150,7 +151,9 @@ namespace LZ_arhive
             try
             {
                 var reader = new StreamReader(_openFileZip.FileName);
+
                 var list = new List<byte>();
+
                 using (reader)
                 {
                     var currentByte = reader.BaseStream.ReadByte();
@@ -160,7 +163,7 @@ namespace LZ_arhive
                         currentByte = reader.BaseStream.ReadByte();
                     }
                 }
-                var decoder = new LzDecoder(list);
+                var decoder = new LzDecoder(list, UnzipBar);
 
                 File.WriteAllText(_openFileZip.FileName.Replace(".nikast", ""), decoder.Decoder(), System.Text.Encoding.Default);
 
@@ -169,6 +172,8 @@ namespace LZ_arhive
                 UnZip.Enabled = false;
 
                 NameBoxUnzip.Text = "";
+
+                UnzipBar.Value = 0;
             }
             catch (Exception ex)
             {

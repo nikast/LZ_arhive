@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace LZ_arhive
 {
@@ -20,21 +21,30 @@ namespace LZ_arhive
         /// </summary>
         private int _codeLength;
 
+        /// <summary>
+        /// Билдер строк
+        /// </summary>
         private readonly StringBuilder _stringBuilder;
+
+        /// <summary>
+        /// Бар
+        /// </summary>
+        private readonly ProgressBar _progressBar;
 
         /// <summary>
         /// Словарь
         /// </summary>
         private readonly Dictionary<string, int> _dictionary;
 
-        public LzCoder(string input)
+        public LzCoder(string input, ProgressBar bar)
         {
+            _progressBar = bar;
             _codeLength = 8;
             _inString = input;
             _stringBuilder = new StringBuilder();
             _dictionary = new Dictionary<string, int>();
              for (var i = 0; i < 256; i++)
-                 _dictionary.Add(System.Text.Encoding.Default.GetString(new byte[1] { Convert.ToByte(i) }), i);
+                 _dictionary.Add(System.Text.ASCIIEncoding.Default.GetString(new byte[1] { Convert.ToByte(i) }), i);
         }
 
         /// <summary>
@@ -44,17 +54,27 @@ namespace LZ_arhive
         public List<byte> ProcessZip()
         {
             _stringBuilder.Clear();
+
+            _progressBar.Minimum = 0;
+
+            _progressBar.Maximum = _inString.Length;
+           
+            _progressBar.Step = 1;
             
             var counter = 0;
 
             while (counter < _inString.Length)
             {
+               
+
                 var w = _inString[counter].ToString();
+                _progressBar.PerformStep();
                 counter++;
 
                 while (_dictionary.ContainsKey(w) && counter < _inString.Length)
                 {
                     w += _inString[counter];
+                    _progressBar.PerformStep();
                     counter++;
                 }
 
