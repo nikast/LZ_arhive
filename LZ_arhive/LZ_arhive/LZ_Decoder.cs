@@ -70,7 +70,9 @@ namespace LZ_arhive
 
             var prevValue = -1;
 
-            while (counter < _inString.Length)
+            var len = _inString.Length;
+
+            while (counter < len)
             {
                 _progressBar.Step = _codeLength;
                 _progressBar.PerformStep();
@@ -82,8 +84,8 @@ namespace LZ_arhive
                 else if (counter + _codeLength <= _inString.Length)
                 {
                     var encodedLen = counter + _codeLength;
-                    var trimBitsLen = _inString.Length - encodedLen;
-                    w = _inString.Substring(counter, _codeLength - (8 - trimBitsLen)) + _inString.Substring(_inString.Length - (8 - trimBitsLen), (8 - trimBitsLen));
+                    var last = _inString.Length - encodedLen;
+                    w = _inString.Substring(counter, _codeLength - (8 - last)) + _inString.Substring(_inString.Length - (8 - last), (8 - last));
                 }
                 else
                 {
