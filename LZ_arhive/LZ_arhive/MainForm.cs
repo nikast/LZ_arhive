@@ -165,7 +165,7 @@ namespace LZ_arhive
                 }
                 var decoder = new LzDecoder(list, UnzipBar);
 
-                File.WriteAllText(_openFileZip.FileName.Replace(".nikast", ""), decoder.Decoder(), System.Text.Encoding.Default);
+                File.WriteAllText(_openFileZip.FileName.Replace(".nikast", ""), decoder.Decoder(), System.Text.ASCIIEncoding.Default);
 
                 this.toolStripStatusLabel1.Text = @"Распаковка выполнена...";
 
